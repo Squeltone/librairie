@@ -33,3 +33,99 @@ body {
     border-radius: 5px;
     text-align: center;
 }
+/* Styles de base pour la mise en page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Conteneur principal du panier */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre principal du panier */
+h1 {
+    text-align: center;
+}
+
+/* Style des produits du panier */
+.product {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Style pour l'image du produit (s'il y en avait une) */
+.product img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* Détails du produit (nom, prix) */
+.product-details {
+    flex: 1;
+    padding-left: 10px;
+}
+
+/* Style pour les prix et la quantité */
+.product-price, .product-quantity {
+    align-self: center;
+}
+
+/* Contrôles de quantité (boutons + et -) */
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+/* Boutons pour ajuster la quantité */
+.quantity-control button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+}
+
+/* Effet au survol des boutons */
+.quantity-control button:hover {
+    background-color: #ccc;
+}
+
+/* Style pour le total du panier */
+.total {
+    text-align: right;
+    padding: 10px 0;
+    font-size: 18px;
+    border-top: 2px solid #ccc;
+}
+
+/* Section de paiement */
+.checkout {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Style du bouton "Procéder au paiement" */
+.checkout button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Effet au survol du bouton de paiement */
+.checkout button:hover {
+    background-color: #45a049;
+}

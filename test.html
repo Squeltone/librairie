@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier d'achat</title>
+    <style>
+        /* Styles de base pour la mise en page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Conteneur principal du panier */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Titre principal du panier */
+        h1 {
+            text-align: center;
+        }
+
+        /* Style des produits du panier */
+        .product {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Style pour l'image du produit (s'il y en avait une) */
+        .product img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        /* Détails du produit (nom, prix) */
+        .product-details {
+            flex: 1;
+            padding-left: 10px;
+        }
+
+        /* Style pour les prix et la quantité */
+        .product-price, .product-quantity {
+            align-self: center;
+        }
+
+        /* Contrôles de quantité (boutons + et -) */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Boutons pour ajuster la quantité */
+        .quantity-control button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #ddd;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Effet au survol des boutons */
+        .quantity-control button:hover {
+            background-color: #ccc;
+        }
+
+        /* Style pour le total du panier */
+        .total {
+            text-align: right;
+            padding: 10px 0;
+            font-size: 18px;
+            border-top: 2px solid #ccc;
+        }
+
+        /* Section de paiement */
+        .checkout {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Style du bouton "Procéder au paiement" */
+        .checkout button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Effet au survol du bouton de paiement */
+        .checkout button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Conteneur principal du panier -->
+    <div class="container">
+        <h1>Mon Panier</h1>
+
+        <!-- Div où les éléments du panier seront affichés dynamiquement -->
+        <div id="cartItems"></div>
+
+        <!-- Affichage du total du panier -->
+        <div class="total">
+            <strong>Total: €<span id="totalPrice">0.00</span></strong>
+        </div>
+
+        <!-- Bouton pour procéder au paiement -->
+        <div class="checkout">
+            <button onclick="checkout()">Procéder au paiement</button>
+        </div>
+    </div>
+
+    <script>
+        // Liste des produits dans le panier (avec nom, prix, quantité)
+        let cart = [
+            { name: 'Produit 1', price: 20.00, quantity: 1 },
+            { name: 'Produit 2', price: 15.00, quantity: 2 },
+            { name: 'Produit 3', price: 30.00, quantity: 1 }
+        ];
+
+        // Fonction pour afficher les articles du panier
+        function displayCart() {
+            const cartItemsDiv = document.getElementById('cartItems'); // Récupère l'élément du DOM pour les produits du panier
+            cartItemsDiv.innerHTML = ''; // Vide le contenu précédent des produits du panier
+
+            // Boucle pour afficher chaque produit du tableau "cart"
+            cart.forEach((product, index) => {
+                const productDiv = document.createElement('div'); // Crée un nouvel élément <div> pour chaque produit
+                productDiv.classList.add('product'); // Ajoute la classe "product" pour le style
+
+                // Contenu HTML pour chaque produit, incluant le nom, le prix, la quantité et des boutons d'interaction
+                productDiv.innerHTML = `
+                    <div class="product-details">
+                        <strong>${product.name}</strong><br>
+                        <span>Prix unitaire: €${product.price.toFixed(2)}</span>
+                    </div>
+                    <div class="quantity-control">
+                        <button onclick="changeQuantity(${index}, -1)">-</button>
+                        <span class="product-quantity">${product.quantity}</span>
+                        <button onclick="changeQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="product-price">€${(product.price * product.quantity).toFixed(2)}</div>
+                    <button onclick="removeItem(${index})" style="color: red;">Supprimer</button>
+                `;
+
+                // Ajoute le produit au panier affiché dans la page
+                cartItemsDiv.appendChild(productDiv);
+            });
+
+            // Met à jour le total à chaque fois que le panier est modifié
+            updateTotal();
+        }
+
+        // Fonction pour ajuster la quantité d'un produit (+1 ou -1)
+        function changeQuantity(index, change) {
+            cart[index].quantity += change; // Modifie la quantité du produit à l'indice donné
+            if (cart[index].quantity < 1) {
+                cart[index].quantity = 1; // Empêche d'avoir une quantité inférieure à 1
+            }
+            displayCart(); // Rafraîchit l'affichage du panier
+        }
+
+        // Fonction pour supprimer un produit du panier
+        function removeItem(index) {
+            cart.splice(index, 1); // Supprime le produit à l'indice donné dans le tableau "cart"
+            displayCart(); // Rafraîchit l'affichage du panier après suppression
+        }
+
+        // Fonction pour mettre à jour le total du panier
+        function updateTotal() {
+            let total = 0; // Variable pour calculer le total
+            cart.forEach(product => {
+                total += product.price * product.quantity; // Additionne le prix total de chaque produit
+            });
+            // Affiche le total calculé dans l'élément HTML correspondant
+            document.getElementById('totalPrice').textContent = total.toFixed(2);
+        }
+
+        // Fonction pour simuler le processus de paiement
+        function checkout() {
+            alert('Procéder au paiement de €' + document.getElementById('totalPrice').textContent);
+        }
+
+        // Initialisation : appel de la fonction pour afficher le panier lors du chargement de la page
+        displayCart();
+    </script>
+
+</body>
+</html>
